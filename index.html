@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Horas Extras - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo i {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .login-logo h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .login-logo p {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .login-form input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+        
+        .login-btn:hover {
+            background-color: #219653;
+        }
+        
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .login-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+        
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .security-info {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e8f4fc;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary-color);
+            font-size: 13px;
+            color: var(--dark-color);
+        }
+        
+        .security-info i {
+            color: var(--secondary-color);
+            margin-right: 8px;
+        }
+        
+        .error-message {
+            background-color: #fee;
+            color: var(--danger-color);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--danger-color);
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 50px 20px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-logo">
+            <i class="fas fa-lock"></i>
+            <h1>Calculadora Horas Extras</h1>
+            <p>Acceso seguro al sistema</p>
+        </div>
+        
+        <div id="errorMessage" class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+        </div>
+        
+        <form id="loginForm" class="login-form">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                <input type="text" id="username" placeholder="Ingresa tu usuario" required autocomplete="username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key"></i> Contraseña</label>
+                <input type="password" id="password" placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+            </div>
+            
+            <div class="form-group">
+                <div class="form-row">
+                    <div>
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe" style="display: inline; font-size: 14px;">Recordarme</label>
+                    </div>
+                    <a href="#" id="forgotPassword" style="font-size: 14px;">¿Olvidaste tu contraseña?</a>
+                </div>
+            </div>
+            
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+            </button>
+        </form>
+        
+        <div class="login-links">
+            <p>¿Primera vez? <a href="#" id="registerLink">Crear una cuenta</a></p>
+            <p><a href="#" id="demoLogin">Acceso de demostración</a></p>
+        </div>
+        
+        <div class="security-info">
+            <p><i class="fas fa-shield-alt"></i> <strong>Seguridad:</strong> Tu información está protegida con encriptación local. Todos los datos se guardan en tu dispositivo.</p>
+        </div>
+    </div>
+    
+    <!-- Modal para registro -->
+    <div id="registerModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Crear Nueva Cuenta</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">Nombre completo</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Nombre de usuario</label>
+                        <input type="text" id="regUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Contraseña</label>
+                        <input type="password" id="regPassword" required minlength="6">
+                        <small>Mínimo 6 caracteres</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirmar contraseña</label>
+                        <input type="password" id="regConfirmPassword" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-save">Crear Cuenta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si ya está autenticado
+            if (auth.isAuthenticated()) {
+                window.location.href = 'main.html';
+            }
+            
+            // Evento login
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Verificar intentos fallidos
+                const attemptCheck = auth.checkFailedAttempts(username);
+                if (attemptCheck.blocked) {
+                    showError(attemptCheck.message);
+                    return;
+                }
+                
+                const result = auth.login(username, password);
+                
+                if (result.success) {
+                    auth.clearFailedAttempts(username);
+                    
+                    // Guardar "recordarme"
+                    if (document.getElementById('rememberMe').checked) {
+                        localStorage.setItem('rememberedUser', username);
+                    }
+                    
+                    // Redirigir a la página principal
+                    window.location.href = 'main.html';
+                } else {
+                    auth.recordFailedAttempt(username);
+                    showError(result.message);
+                }
+            });
+            
+            // Cargar usuario recordado
+            const rememberedUser = localStorage.getItem('rememberedUser');
+            if (rememberedUser) {
+                document.getElementById('username').value = rememberedUser;
+                document.getElementById('rememberMe').checked = true;
+            }
+            
+            // Modal de registro
+            document.getElementById('registerLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('registerModal').style.display = 'block';
+            });
+            
+            document.querySelector('.close-modal').addEventListener('click', function() {
+                document.getElementById('registerModal').style.display = 'none';
+            });
+            
+            // Registro
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('regName').value;
+                const username = document.getElementById('regUsername').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert('Las contraseñas no coinciden');
+                    return;
+                }
+                
+                const result = auth.createUser(username, password, name);
+                
+                if (result.success) {
+                    alert('Cuenta creada exitosamente. Ahora puedes iniciar sesión.');
+                    document.getElementById('registerModal').style.display = 'none';
+                    document.getElementById('username').value = username;
+                } else {
+                    alert(result.message);
+                }
+            });
+            
+            // Login de demostración
+            document.getElementById('demoLogin').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('username').value = 'admin';
+                document.getElementById('password').value = 'admin123';
+            });
+            
+            // Olvidó contraseña
+            document.getElementById('forgotPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                const username = prompt('Ingresa tu nombre de usuario:');
+                if (username) {
+                    alert('Para restablecer la contraseña, contacta al administrador del sistema.\nUsuario: ' + username);
+                }
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            window.addEventListener('click', function(e) {
+                const modal = document.getElementById('registerModal');
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        function showError(message) {
+            document.getElementById('errorText').textContent = message;
+            document.getElementById('errorMessage').classList.add('show');
+            
+            setTimeout(() => {
+                document.getElementById('errorMessage').classList.remove('show');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
