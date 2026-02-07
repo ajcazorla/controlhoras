@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Horas Extras</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Verificación de autenticación
+        document.addEventListener('DOMContentLoaded', () => {
+            const authData = localStorage.getItem('hours_calc_auth');
+            
+            if (!authData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const auth = JSON.parse(authData);
+            const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+            const hasActiveSession = auth.rememberMe || 
+                                   (auth.lastLogin && (Date.now() - auth.lastLogin < TWENTY_FOUR_HOURS));
+            
+            if (!hasActiveSession || !auth.passwordHash) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>📊 Calculadora de Horas Extras</h1>
+                <button id="logoutBtn" class="btn btn-secondary btn-sm">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+            <p>Introduce tus jornadas diarias y calcula automáticamente los importes</p>
+        </header>
+
+        <main>
+            <!-- Formulario para un día -->
+            <section class="form-section card">
+                <h2>➕ Añadir Nueva Jornada</h2>
+                <form id="dayForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Fecha:</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="startTime">Hora de Entrada:</label>
+                            <input type="time" id="startTime" value="08:00" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime">Hora de Salida:</label>
+                            <input type="time" id="endTime" value="17:00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            ✅ Calcular y Guardar Día
+                        </button>
+                        <button type="button" id="clearForm" class="btn btn-secondary">
+                            🗑️ Limpiar
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Resumen del día actual -->
+            <section class="summary-section card">
+                <h2>📈 Resumen del Día</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="label">Horas Totales:</span>
+                        <span class="value" id="totalHours">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Horas Extras (L-V):</span>
+                        <span class="value" id="extraHours">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Horas Sábado:</span>
+                        <span class="value" id="saturdayHours">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Horas Domingo:</span>
+                        <span class="value" id="sundayHours">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Horas Festivo:</span>
+                        <span class="value" id="holidayHours">0.00</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Horas Nocturnas:</span>
+                        <span class="value" id="nightHours">0.00</span>
+                    </div>
+                    <div class="summary-item total">
+                        <span class="label">Importe del Día:</span>
+                        <span class="value" id="dayAmount">0.00 €</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Listado de todos los días -->
+            <section class="list-section card">
+                <div class="section-header">
+                    <h2>📋 Historial de Jornadas</h2>
+                    <div class="controls">
+                        <button id="exportBtn" class="btn btn-outline">
+                            📥 Exportar Datos
+                        </button>
+                        <button id="clearAllBtn" class="btn btn-danger">
+                            🗑️ Limpiar Todo
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="recordsTable">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Entrada</th>
+                                <th>Salida</th>
+                                <th>Totales</th>
+                                <th>Extras</th>
+                                <th>Sábado</th>
+                                <th>Domingo</th>
+                                <th>Festivo</th>
+                                <th>Nocturnas</th>
+                                <th>Importe</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los registros se cargarán aquí dinámicamente -->
+                            <tr class="empty-row">
+                                <td colspan="11">No hay jornadas registradas. Añade la primera arriba.</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="9"><strong>Total Acumulado:</strong></td>
+                                <td colspan="2"><strong id="totalAmount">0.00 €</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Navegación -->
+            <nav class="navigation">
+                <a href="config.html" class="btn btn-config">
+                    ⚙️ Configurar Importes y Festivos
+                </a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>Los datos se guardan automáticamente en tu navegador.</p>
+        </footer>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
