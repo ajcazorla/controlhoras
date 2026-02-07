@@ -1,0 +1,501 @@
+/* ===== ESTILOS GENERALES ===== */
+:root {
+    --primary-color: #4361ee;
+    --secondary-color: #3a0ca3;
+    --success-color: #4cc9f0;
+    --danger-color: #f72585;
+    --warning-color: #f8961e;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --border-color: #dee2e6;
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-color);
+    background-color: #f5f7ff;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ===== HEADER ===== */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 0;
+}
+
+header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+}
+
+/* ===== FORMULARIOS ===== */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+}
+
+/* ===== BOTONES ===== */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-config {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ===== RESUMEN DEL DÍA ===== */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.summary-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.summary-item.total {
+    background: #e7f4ff;
+    border-left-color: var(--success-color);
+    grid-column: 1 / -1;
+}
+
+.summary-item .label {
+    display: block;
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.summary-item .value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--dark-color);
+}
+
+/* ===== TABLA ===== */
+.table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+}
+
+td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+tfoot tr {
+    background-color: #e7f4ff;
+}
+
+.empty-row td {
+    text-align: center;
+    color: #999;
+    padding: 2rem;
+    font-style: italic;
+}
+
+.total-row td {
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 1rem;
+}
+
+/* ===== NAVEGACIÓN ===== */
+.navigation {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ===== ESTADOS ===== */
+.hidden {
+    display: none !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* ===== ESTILOS ESPECÍFICOS PARA CONFIGURACIÓN ===== */
+.subtitle {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.rates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.rate-item {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.rate-item label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.currency {
+    background: #e9ecef;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    font-weight: 600;
+}
+
+.input-group input {
+    flex: 1;
+    border-radius: 0 4px 4px 0;
+}
+
+.hint {
+    display: block;
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
+
+/* ===== GESTIÓN DE FESTIVOS ===== */
+.holidays-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.add-holiday, .year-filter {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-holiday .input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.add-holiday .input-group input {
+    flex: 1;
+}
+
+.year-filter select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.holidays-list h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.holiday-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.holiday-date {
+    font-weight: 600;
+}
+
+.holiday-actions button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border: 2px dashed #dee2e6;
+}
+
+/* ===== GESTIÓN DE DATOS ===== */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.data-item {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.data-item h3 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.data-item p {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.import-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#fileName {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.warning-box {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+/* ===== SECCIÓN SEGURIDAD ===== */
+.security-section .form-group {
+    margin-bottom: 1rem;
+}
+
+#passwordChangeMessage {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+#passwordChangeMessage.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+#passwordChangeMessage.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ===== CONTROLES DE SECCIÓN ===== */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+}
+
+.controls {
+    display: flex;
+    gap: 0.5rem;
+}
