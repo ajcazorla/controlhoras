@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Calculadora de Horas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/config.css">
+    <script>
+        // Verificación de autenticación
+        document.addEventListener('DOMContentLoaded', () => {
+            const authData = localStorage.getItem('hours_calc_auth');
+            
+            if (!authData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const auth = JSON.parse(authData);
+            const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+            const hasActiveSession = auth.rememberMe || 
+                                   (auth.lastLogin && (Date.now() - auth.lastLogin < TWENTY_FOUR_HOURS));
+            
+            if (!hasActiveSession || !auth.passwordHash) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <h1>⚙️ Configuración</h1>
+                <button id="logoutBtn" class="btn btn-secondary btn-sm">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+            <p>Modifica los importes y gestiona los días festivos</p>
+        </header>
+
+        <main>
+            <!-- Configuración de importes -->
+            <section class="config-section card">
+                <h2>💰 Valores por Hora</h2>
+                <p class="subtitle">Estos valores se aplicarán a todos los cálculos</p>
+                
+                <form id="ratesForm">
+                    <div class="rates-grid">
+                        <div class="rate-item">
+                            <label for="rateExtra">Hora Extra (L-V después de 8h):</label>
+                            <div class="input-group">
+                                <span class="currency">€</span>
+                                <input type="number" step="0.01" min="0" id="rateExtra" value="10.36" required>
+                            </div>
+                            <small class="hint">Lunes a Viernes, horas que excedan las 8 diarias</small>
+                        </div>
+                        
+                        <div class="rate-item">
+                            <label for="rateSaturday">Hora de Sábado:</label>
+                            <div class="input-group">
+                                <span class="currency">€</span>
+                                <input type="number" step="0.01" min="0" id="rateSaturday" value="12.46" required>
+                            </div>
+                            <small class="hint">Todas las horas trabajadas en sábado</small>
+                        </div>
+                        
+                        <div class="rate-item">
+                            <label for="rateSunday">Hora de Domingo:</label>
+                            <div class="input-group">
+                                <span class="currency">€</span>
+                                <input type="number" step="0.01" min="0" id="rateSunday" value="15.55" required>
+                            </div>
+                            <small class="hint">Todas las horas trabajadas en domingo</small>
+                        </div>
+                        
+                        <div class="rate-item">
+                            <label for="rateHoliday">Hora de Festivo:</label>
+                            <div class="input-group">
+                                <span class="currency">€</span>
+                                <input type="number" step="0.01" min="0" id="rateHoliday" value="18.66" required>
+                            </div>
+                            <small class="hint">Todas las horas en días marcados como festivos</small>
+                        </div>
+                        
+                        <div class="rate-item">
+                            <label for="rateNight">Plus Nocturno (22:00-06:00):</label>
+                            <div class="input-group">
+                                <span class="currency">€</span>
+                                <input type="number" step="0.01" min="0" id="rateNight" value="1.74" required>
+                            </div>
+                            <small class="hint">Se suma a cualquier hora en franja nocturna</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            💾 Guardar Valores
+                        </button>
+                        <button type="button" id="resetRates" class="btn btn-secondary">
+                            🔄 Restaurar Valores por Defecto
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Gestión de festivos -->
+            <section class="holidays-section card">
+                <div class="section-header">
+                    <h2>📅 Días Festivos</h2>
+                    <p class="subtitle">Estos días se pagarán como "Horas Festivo" (independientemente del día de la semana)</p>
+                </div>
+                
+                <div class="holidays-controls">
+                    <div class="add-holiday">
+                        <label for="newHoliday">Añadir Festivo:</label>
+                        <div class="input-group">
+                            <input type="date" id="newHoliday">
+                            <button type="button" id="addHolidayBtn" class="btn btn-primary">
+                                ➕ Añadir
+                            </button>
+                        </div>
+                        <small class="hint">Ejemplo: 2024-12-25 (Navidad)</small>
+                    </div>
+                    
+                    <div class="year-filter">
+                        <label for="yearSelect">Filtrar por año:</label>
+                        <select id="yearSelect">
+                            <option value="all">Todos los años</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="holidays-list">
+                    <h3>Festivos Configurados</h3>
+                    <div id="holidaysContainer">
+                        <!-- Los festivos aparecerán aquí dinámicamente -->
+                        <div class="empty-state">
+                            No hay festivos configurados. Añade el primero arriba.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gestión de datos -->
+            <section class="data-section card">
+                <h2>💾 Gestión de Datos</h2>
+                
+                <div class="data-grid">
+                    <div class="data-item">
+                        <h3>Exportar Datos</h3>
+                        <p>Guarda una copia de todos tus registros y configuración</p>
+                        <button id="exportDataBtn" class="btn btn-outline">
+                            📥 Exportar Todo (JSON)
+                        </button>
+                    </div>
+                    
+                    <div class="data-item">
+                        <h3>Importar Datos</h3>
+                        <p>Carga un archivo previamente exportado</p>
+                        <div class="import-controls">
+                            <input type="file" id="importFile" accept=".json" hidden>
+                            <button id="importBtn" class="btn btn-outline">
+                                📤 Seleccionar Archivo
+                            </button>
+                            <span id="fileName">Ningún archivo seleccionado</span>
+                        </div>
+                    </div>
+                    
+                    <div class="data-item">
+                        <h3>Borrar Todo</h3>
+                        <p>Elimina todos los registros y configuración</p>
+                        <button id="nukeDataBtn" class="btn btn-danger">
+                            🗑️ Borrar Todos los Datos
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seguridad -->
+            <section class="security-section card">
+                <h2>🔐 Seguridad</h2>
+                
+                <div class="form-group">
+                    <label for="currentPassword">Contraseña actual:</label>
+                    <input type="password" id="currentPassword">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newSecurityPassword">Nueva contraseña:</label>
+                    <input type="password" id="newSecurityPassword">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirmar nueva contraseña:</label>
+                    <input type="password" id="confirmNewPassword">
+                </div>
+                
+                <div id="passwordChangeMessage"></div>
+                
+                <button id="changePasswordBtn" class="btn btn-primary">
+                    🔄 Cambiar Contraseña
+                </button>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> Si olvidas la contraseña, perderás acceso a tus datos.
+                    Considera exportar una copia de seguridad regularmente.
+                </div>
+            </section>
+
+            <!-- Navegación -->
+            <nav class="navigation">
+                <a href="index.html" class="btn btn-primary">
+                    ← Volver a la Calculadora
+                </a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>Los cambios se guardan automáticamente en tu navegador.</p>
+        </footer>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/config.js"></script>
+</body>
+</html>
